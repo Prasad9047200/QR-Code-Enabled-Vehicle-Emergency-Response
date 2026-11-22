@@ -31,9 +31,11 @@ html, body, [class*="css"] {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
 
-/* ── App Background ── */
+/* ── App Background — road/tarmac feel ── */
 .stApp {
-    background: linear-gradient(135deg, #0a0a1a 0%, #0d1b2a 50%, #0a1628 100%);
+    background:
+        repeating-linear-gradient(90deg, transparent, transparent 48px, rgba(255,255,255,.018) 48px, rgba(255,255,255,.018) 50px),
+        linear-gradient(180deg, #060d14 0%, #0a1628 40%, #0d1b2a 100%);
     min-height: 100vh;
 }
 
@@ -53,22 +55,50 @@ h1, h2, h3, h4, h5, h6 { color: #f1f5f9 !important; }
 /* ── Emergency Hero Banner ── */
 .emergency-hero {
     background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #b91c1c 100%);
-    border-radius: 16px;
-    padding: 2.5rem 2rem;
-    text-align: center;
+    border-radius: 20px;
+    padding: 0;
     margin-bottom: 2rem;
     border: 1px solid #ef4444;
-    box-shadow: 0 0 40px rgba(239,68,68,0.3);
+    box-shadow: 0 0 60px rgba(239,68,68,0.35);
+    overflow: hidden;
+    position: relative;
     animation: pulse-border 3s infinite;
 }
 @keyframes pulse-border {
-    0%, 100% { box-shadow: 0 0 20px rgba(239,68,68,0.3); }
-    50%       { box-shadow: 0 0 60px rgba(239,68,68,0.6); }
+    0%, 100% { box-shadow: 0 0 30px rgba(239,68,68,0.35); }
+    50%       { box-shadow: 0 0 80px rgba(239,68,68,0.65); }
 }
-.emergency-hero h1 { color: #fff !important; font-size: 2.4rem; font-weight: 800; margin: 0; }
-.emergency-hero p  { color: #fca5a5 !important; font-size: 1.1rem; margin: .5rem 0 0; }
+.emergency-hero .hero-inner {
+    display: flex; align-items: center; gap: 2rem;
+    padding: 2rem 2.5rem;
+}
+.emergency-hero .hero-text { flex: 1; }
+.emergency-hero h1 { color: #fff !important; font-size: 2.2rem; font-weight: 800; margin: 0 0 .4rem; line-height:1.2; }
+.emergency-hero p  { color: #fca5a5 !important; font-size: 1rem; margin: .3rem 0 0; }
+.emergency-hero .hero-svg { flex-shrink: 0; }
+/* road stripe animation */
+.hero-road { overflow:hidden; height:8px; background:#1a0000; }
+.hero-road-stripe { height:8px; background: repeating-linear-gradient(90deg,
+    #ef4444 0,#ef4444 40px, transparent 40px, transparent 80px);
+    animation: road-anim 1.5s linear infinite; width:200%; }
+@keyframes road-anim { from{transform:translateX(0)} to{transform:translateX(-80px)} }
 
-/* ── Metric Cards ── */
+/* ── Stat Cards ── */
+.stat-card {
+    background: rgba(17,24,39,0.95);
+    border: 1px solid #1e3a5f;
+    border-radius: 14px;
+    padding: 1.2rem 1rem 1rem;
+    text-align: center;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+    position: relative; overflow: hidden;
+}
+.stat-card:hover { transform: translateY(-3px); border-color: #ef4444; box-shadow: 0 8px 30px rgba(239,68,68,.2); }
+.stat-card .sc-icon { margin-bottom: .4rem; }
+.stat-card .value { font-size: 2.2rem; font-weight: 800; color: #ef4444; line-height:1; }
+.stat-card .label { font-size: 0.78rem; color: #94a3b8; margin-top: 5px; text-transform: uppercase; letter-spacing: .05em; }
+
+/* ── Metric Cards (kept for other pages) ── */
 .metric-card {
     background: rgba(17,24,39,0.9);
     border: 1px solid #1e3a5f;
@@ -325,14 +355,32 @@ if not st.session_state.vehicles:
 # ─── Sidebar Navigation ────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("""
-    <div style="text-align:center; padding: 1rem 0 1.5rem;">
-        <div style="font-size:3rem;">🚨</div>
-        <div style="font-size:1.1rem; font-weight:800; color:#ef4444; letter-spacing:.03em;">VehicleGuard</div>
-        <div style="font-size:.72rem; color:#64748b; margin-top:3px;">Emergency Response System</div>
-        <div style="margin-top:.7rem; padding:.3rem .8rem; background:rgba(239,68,68,.15);
-             border-radius:20px; font-size:.7rem; color:#fca5a5; display:inline-block;">
-             🟢 SYSTEM ACTIVE
-        </div>
+    <div style="text-align:center; padding: .8rem 0 1.2rem;">
+      <!-- Ambulance SVG logo -->
+      <svg width="130" height="65" viewBox="0 0 180 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto .5rem;">
+        <rect x="10" y="30" width="140" height="45" rx="6" fill="#dc2626"/>
+        <rect x="120" y="18" width="30" height="57" rx="4" fill="#b91c1c"/>
+        <rect x="123" y="22" width="22" height="20" rx="3" fill="#bfdbfe" opacity=".8"/>
+        <rect x="40" y="36" width="36" height="30" rx="3" fill="white"/>
+        <rect x="52" y="38" width="12" height="26" rx="2" fill="#dc2626"/>
+        <rect x="42" y="47" width="32" height="10" rx="2" fill="#dc2626"/>
+        <rect x="20" y="24" width="96" height="8" rx="4" fill="#1e3a5f"/>
+        <rect x="24" y="26" width="12" height="4" rx="2" fill="#ef4444"/>
+        <rect x="40" y="26" width="12" height="4" rx="2" fill="#93c5fd"/>
+        <rect x="56" y="26" width="12" height="4" rx="2" fill="#ef4444"/>
+        <rect x="72" y="26" width="12" height="4" rx="2" fill="#93c5fd"/>
+        <rect x="88" y="26" width="12" height="4" rx="2" fill="#ef4444"/>
+        <circle cx="40" cy="76" r="12" fill="#1f2937"/><circle cx="40" cy="76" r="6" fill="#374151"/>
+        <circle cx="130" cy="76" r="12" fill="#1f2937"/><circle cx="130" cy="76" r="6" fill="#374151"/>
+        <line x1="100" y1="32" x2="100" y2="74" stroke="#991b1b" stroke-width="2"/>
+        <text x="58" y="72" font-family="Arial" font-size="9" font-weight="bold" fill="white">108</text>
+      </svg>
+      <div style="font-size:1.1rem; font-weight:800; color:#ef4444; letter-spacing:.03em;">VehicleGuard</div>
+      <div style="font-size:.7rem; color:#64748b; margin-top:2px;">Emergency Response System</div>
+      <div style="margin-top:.6rem; padding:.25rem .8rem; background:rgba(239,68,68,.15);
+           border-radius:20px; font-size:.68rem; color:#fca5a5; display:inline-block; letter-spacing:.05em;">
+           🟢 SYSTEM ACTIVE
+      </div>
     </div>
     <hr style="border-color:#1e3a5f; margin:0 0 1rem;">
     """, unsafe_allow_html=True)
@@ -360,39 +408,290 @@ with st.sidebar:
 # PAGE 1 — HOME
 # ═══════════════════════════════════════════════════════════════════════════════
 if page == "🏠 Home":
-    st.markdown("""
+
+    # ── SVG Illustrations ──────────────────────────────────────────────────────
+    SVG_AMBULANCE = """
+    <svg width="180" height="90" viewBox="0 0 180 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- body -->
+      <rect x="10" y="30" width="140" height="45" rx="6" fill="#dc2626"/>
+      <!-- cab -->
+      <rect x="120" y="18" width="30" height="57" rx="4" fill="#b91c1c"/>
+      <!-- windshield -->
+      <rect x="123" y="22" width="22" height="20" rx="3" fill="#bfdbfe" opacity=".8"/>
+      <!-- red cross box -->
+      <rect x="40" y="36" width="36" height="30" rx="3" fill="white"/>
+      <rect x="52" y="38" width="12" height="26" rx="2" fill="#dc2626"/>
+      <rect x="42" y="47" width="32" height="10" rx="2" fill="#dc2626"/>
+      <!-- siren bar -->
+      <rect x="20" y="24" width="96" height="8" rx="4" fill="#1e3a5f"/>
+      <rect x="24" y="26" width="12" height="4" rx="2" fill="#ef4444"/>
+      <rect x="40" y="26" width="12" height="4" rx="2" fill="#3b82f6"/>
+      <rect x="56" y="26" width="12" height="4" rx="2" fill="#ef4444"/>
+      <rect x="72" y="26" width="12" height="4" rx="2" fill="#3b82f6"/>
+      <rect x="88" y="26" width="12" height="4" rx="2" fill="#ef4444"/>
+      <!-- wheels -->
+      <circle cx="40" cy="76" r="12" fill="#1f2937"/><circle cx="40" cy="76" r="6" fill="#374151"/>
+      <circle cx="130" cy="76" r="12" fill="#1f2937"/><circle cx="130" cy="76" r="6" fill="#374151"/>
+      <!-- door line -->
+      <line x1="100" y1="32" x2="100" y2="74" stroke="#991b1b" stroke-width="2"/>
+      <!-- 108 text -->
+      <text x="58" y="72" font-family="Arial" font-size="9" font-weight="bold" fill="white">108</text>
+    </svg>"""
+
+    SVG_QR = """
+    <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="90" height="90" rx="10" fill="white"/>
+      <!-- top-left finder -->
+      <rect x="8" y="8" width="22" height="22" rx="3" fill="#1f2937"/>
+      <rect x="13" y="13" width="12" height="12" rx="2" fill="white"/>
+      <rect x="16" y="16" width="6" height="6" rx="1" fill="#dc2626"/>
+      <!-- top-right finder -->
+      <rect x="60" y="8" width="22" height="22" rx="3" fill="#1f2937"/>
+      <rect x="65" y="13" width="12" height="12" rx="2" fill="white"/>
+      <rect x="68" y="16" width="6" height="6" rx="1" fill="#dc2626"/>
+      <!-- bottom-left finder -->
+      <rect x="8" y="60" width="22" height="22" rx="3" fill="#1f2937"/>
+      <rect x="13" y="65" width="12" height="12" rx="2" fill="white"/>
+      <rect x="16" y="68" width="6" height="6" rx="1" fill="#dc2626"/>
+      <!-- data modules (scattered) -->
+      <rect x="36" y="8" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="44" y="8" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="36" y="16" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="8" y="36" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="8" y="44" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="36" y="36" width="6" height="6" rx="1" fill="#dc2626"/>
+      <rect x="44" y="36" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="52" y="36" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="60" y="36" width="6" height="6" rx="1" fill="#dc2626"/>
+      <rect x="68" y="36" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="76" y="36" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="36" y="44" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="52" y="44" width="6" height="6" rx="1" fill="#dc2626"/>
+      <rect x="68" y="44" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="36" y="52" width="6" height="6" rx="1" fill="#dc2626"/>
+      <rect x="44" y="52" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="60" y="52" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="76" y="52" width="6" height="6" rx="1" fill="#dc2626"/>
+      <rect x="44" y="60" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="52" y="68" width="6" height="6" rx="1" fill="#dc2626"/>
+      <rect x="60" y="76" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="76" y="68" width="6" height="6" rx="1" fill="#1f2937"/>
+      <rect x="76" y="76" width="6" height="6" rx="1" fill="#1f2937"/>
+    </svg>"""
+
+    SVG_CAR_CRASH = """
+    <svg width="200" height="110" viewBox="0 0 200 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- road -->
+      <rect x="0" y="80" width="200" height="30" fill="#1a1a2e"/>
+      <rect x="20" y="93" width="30" height="4" rx="2" fill="#374151"/>
+      <rect x="85" y="93" width="30" height="4" rx="2" fill="#374151"/>
+      <rect x="150" y="93" width="30" height="4" rx="2" fill="#374151"/>
+      <!-- car 1 (left, tilted) -->
+      <g transform="rotate(-8,60,70)">
+        <rect x="20" y="52" width="80" height="28" rx="6" fill="#1d4ed8"/>
+        <rect x="30" y="38" width="55" height="20" rx="5" fill="#1e40af"/>
+        <rect x="34" y="41" width="20" height="14" rx="2" fill="#bfdbfe" opacity=".7"/>
+        <rect x="58" y="41" width="20" height="14" rx="2" fill="#bfdbfe" opacity=".7"/>
+        <circle cx="35" cy="80" r="10" fill="#111827"/><circle cx="35" cy="80" r="5" fill="#374151"/>
+        <circle cx="85" cy="80" r="10" fill="#111827"/><circle cx="85" cy="80" r="5" fill="#374151"/>
+      </g>
+      <!-- car 2 (right, tilted other way) -->
+      <g transform="rotate(10,145,70)">
+        <rect x="110" y="52" width="80" height="28" rx="6" fill="#dc2626"/>
+        <rect x="120" y="38" width="55" height="20" rx="5" fill="#b91c1c"/>
+        <rect x="124" y="41" width="20" height="14" rx="2" fill="#fca5a5" opacity=".7"/>
+        <rect x="148" y="41" width="20" height="14" rx="2" fill="#fca5a5" opacity=".7"/>
+        <circle cx="122" cy="80" r="10" fill="#111827"/><circle cx="122" cy="80" r="5" fill="#374151"/>
+        <circle cx="175" cy="80" r="10" fill="#111827"/><circle cx="175" cy="80" r="5" fill="#374151"/>
+      </g>
+      <!-- impact sparks -->
+      <circle cx="100" cy="62" r="3" fill="#fbbf24" opacity=".9"/>
+      <circle cx="107" cy="55" r="2" fill="#f97316" opacity=".8"/>
+      <circle cx="93" cy="57" r="2.5" fill="#ef4444" opacity=".9"/>
+      <circle cx="104" cy="68" r="1.8" fill="#fbbf24"/>
+      <circle cx="96" cy="70" r="2" fill="#f97316"/>
+      <!-- warning triangle -->
+      <polygon points="100,10 86,34 114,34" fill="none" stroke="#fbbf24" stroke-width="3"/>
+      <text x="96.5" y="30" font-family="Arial" font-size="14" font-weight="bold" fill="#fbbf24">!</text>
+    </svg>"""
+
+    SVG_PHONE_SCAN = """
+    <svg width="90" height="130" viewBox="0 0 90 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- phone body -->
+      <rect x="10" y="5" width="70" height="120" rx="12" fill="#1f2937"/>
+      <rect x="14" y="9" width="62" height="112" rx="9" fill="#111827"/>
+      <!-- screen -->
+      <rect x="16" y="12" width="58" height="96" rx="7" fill="#0a1628"/>
+      <!-- QR on screen -->
+      <rect x="24" y="20" width="42" height="42" rx="4" fill="white" opacity=".95"/>
+      <rect x="27" y="23" width="10" height="10" rx="1" fill="#1f2937"/>
+      <rect x="29" y="25" width="6" height="6" rx="1" fill="#dc2626"/>
+      <rect x="49" y="23" width="10" height="10" rx="1" fill="#1f2937"/>
+      <rect x="51" y="25" width="6" height="6" rx="1" fill="#dc2626"/>
+      <rect x="27" y="43" width="10" height="10" rx="1" fill="#1f2937"/>
+      <rect x="29" y="45" width="6" height="6" rx="1" fill="#dc2626"/>
+      <rect x="40" y="23" width="4" height="4" rx="1" fill="#1f2937"/>
+      <rect x="40" y="30" width="4" height="4" rx="1" fill="#dc2626"/>
+      <rect x="40" y="37" width="4" height="4" rx="1" fill="#1f2937"/>
+      <rect x="40" y="44" width="4" height="4" rx="1" fill="#1f2937"/>
+      <rect x="47" y="30" width="4" height="4" rx="1" fill="#1f2937"/>
+      <rect x="53" y="37" width="4" height="4" rx="1" fill="#dc2626"/>
+      <rect x="47" y="44" width="4" height="4" rx="1" fill="#1f2937"/>
+      <!-- scan line -->
+      <line x1="20" y1="41" x2="70" y2="41" stroke="#22c55e" stroke-width="2" opacity=".9"/>
+      <line x1="20" y1="41" x2="70" y2="41" stroke="#22c55e" stroke-width="8" opacity=".15"/>
+      <!-- notification card on screen -->
+      <rect x="18" y="68" width="54" height="34" rx="4" fill="#7f1d1d" opacity=".9"/>
+      <text x="22" y="80" font-family="Arial" font-size="6" font-weight="bold" fill="#fca5a5">🚨 EMERGENCY ALERT</text>
+      <text x="22" y="90" font-family="Arial" font-size="5" fill="#fecaca">Family notified</text>
+      <text x="22" y="98" font-family="Arial" font-size="5" fill="#fecaca">Ambulance dispatched</text>
+      <!-- home button -->
+      <circle cx="45" cy="119" r="5" fill="#374151"/>
+    </svg>"""
+
+    SVG_MEDICAL = """
+    <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- shield -->
+      <path d="M50 5 L90 20 L90 55 Q90 80 50 95 Q10 80 10 55 L10 20 Z" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2"/>
+      <!-- cross -->
+      <rect x="38" y="30" width="24" height="40" rx="4" fill="white" opacity=".95"/>
+      <rect x="28" y="40" width="44" height="20" rx="4" fill="white" opacity=".95"/>
+      <!-- blood drop -->
+      <path d="M50 42 Q44 50 44 55 Q44 61 50 61 Q56 61 56 55 Q56 50 50 42Z" fill="#dc2626"/>
+      <text x="43" y="58" font-family="Arial" font-size="9" font-weight="bold" fill="white">O+</text>
+    </svg>"""
+
+    SVG_BRAIN_AI = """
+    <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- brain shape -->
+      <ellipse cx="50" cy="45" rx="30" ry="28" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+      <path d="M20 45 Q18 32 28 26 Q38 20 50 22 Q62 20 72 26 Q82 32 80 45" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+      <path d="M50 22 L50 68" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="3,3"/>
+      <path d="M20 45 Q35 42 50 45 Q65 42 80 45" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+      <!-- circuit lines -->
+      <line x1="30" y1="38" x2="38" y2="38" stroke="#22c55e" stroke-width="1.5"/>
+      <line x1="38" y1="38" x2="38" y2="30" stroke="#22c55e" stroke-width="1.5"/>
+      <circle cx="38" cy="30" r="2.5" fill="#22c55e"/>
+      <line x1="62" y1="38" x2="70" y2="38" stroke="#22c55e" stroke-width="1.5"/>
+      <line x1="62" y1="38" x2="62" y2="30" stroke="#22c55e" stroke-width="1.5"/>
+      <circle cx="62" cy="30" r="2.5" fill="#22c55e"/>
+      <line x1="40" y1="52" x2="40" y2="62" stroke="#f97316" stroke-width="1.5"/>
+      <circle cx="40" cy="62" r="2.5" fill="#f97316"/>
+      <line x1="60" y1="52" x2="60" y2="62" stroke="#f97316" stroke-width="1.5"/>
+      <circle cx="60" cy="62" r="2.5" fill="#f97316"/>
+      <!-- IBM label -->
+      <rect x="34" y="74" width="32" height="14" rx="4" fill="#0f62fe"/>
+      <text x="38" y="84" font-family="Arial" font-size="8" font-weight="bold" fill="white">Watson</text>
+    </svg>"""
+
+    SVG_GPS = """
+    <svg width="80" height="90" viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- pin -->
+      <path d="M40 5 C22 5 10 18 10 32 C10 52 40 80 40 80 C40 80 70 52 70 32 C70 18 58 5 40 5Z" fill="#dc2626"/>
+      <circle cx="40" cy="32" r="12" fill="white"/>
+      <circle cx="40" cy="32" r="6" fill="#dc2626"/>
+      <!-- signal rings -->
+      <circle cx="40" cy="32" r="18" fill="none" stroke="#ef4444" stroke-width="1.5" opacity=".5"/>
+      <circle cx="40" cy="32" r="24" fill="none" stroke="#ef4444" stroke-width="1" opacity=".3"/>
+      <!-- coordinate text -->
+      <rect x="5" y="82" width="70" height="10" rx="3" fill="#1e3a5f"/>
+      <text x="10" y="90" font-family="monospace" font-size="6" fill="#22c55e">12.9716°N 77.5946°E</text>
+    </svg>"""
+
+    SVG_NOTIFICATION = """
+    <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- bell -->
+      <path d="M50 10 C35 10 25 22 25 36 L25 60 L15 70 L85 70 L75 60 L75 36 C75 22 65 10 50 10Z" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2"/>
+      <rect x="40" y="68" width="20" height="10" rx="5" fill="#374151"/>
+      <circle cx="50" cy="78" r="6" fill="#1f2937" stroke="#3b82f6" stroke-width="2"/>
+      <!-- notification badge -->
+      <circle cx="72" cy="18" r="12" fill="#dc2626"/>
+      <text x="67" y="23" font-family="Arial" font-size="11" font-weight="bold" fill="white">!</text>
+      <!-- wave rings -->
+      <path d="M15 36 Q10 50 15 64" fill="none" stroke="#3b82f6" stroke-width="2" opacity=".6"/>
+      <path d="M8 32 Q2 50 8 68" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity=".4"/>
+      <path d="M85 36 Q90 50 85 64" fill="none" stroke="#3b82f6" stroke-width="2" opacity=".6"/>
+      <path d="M92 32 Q98 50 92 68" fill="none" stroke="#3b82f6" stroke-width="1.5" opacity=".4"/>
+    </svg>"""
+
+    # ── HERO BANNER with SVG illustrations ───────────────────────────────────
+    st.markdown(f"""
     <div class="emergency-hero">
-        <h1>🚨 VehicleGuard Emergency Response</h1>
-        <p>QR-Code-Enabled Accident Notification System with IBM WatsonX RAG Knowledge Assistant</p>
-        <p style="color:#fca5a5; font-size:.85rem; margin-top:.5rem;">
-            Every registered vehicle carries a tamper-resistant QR sticker.
-            One scan by any bystander activates the full emergency chain.
-        </p>
+      <div class="hero-road"><div class="hero-road-stripe"></div></div>
+      <div class="hero-inner">
+        <div style="flex-shrink:0;">{SVG_AMBULANCE}</div>
+        <div class="hero-text">
+          <div style="font-size:.7rem;letter-spacing:.15em;color:#fca5a5;font-weight:700;margin-bottom:.5rem;">
+            🔴 GOLDEN HOUR RESPONSE SYSTEM
+          </div>
+          <h1>VehicleGuard<br>Emergency Response</h1>
+          <p>QR-Code-Enabled Accident Notification with IBM WatsonX RAG Knowledge Assistant</p>
+          <p style="color:#fecaca;font-size:.82rem;margin-top:.6rem;">
+            One QR scan → Medical profile revealed · Family notified · AI first-aid guidance
+          </p>
+          <div style="display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,.12);color:#fff;padding:.3rem .8rem;border-radius:20px;font-size:.72rem;font-weight:600;">
+              🏥 108 Ambulance Ready
+            </span>
+            <span style="background:rgba(255,255,255,.12);color:#fff;padding:.3rem .8rem;border-radius:20px;font-size:.72rem;font-weight:600;">
+              🤖 IBM WatsonX RAG
+            </span>
+            <span style="background:rgba(255,255,255,.12);color:#fff;padding:.3rem .8rem;border-radius:20px;font-size:.72rem;font-weight:600;">
+              🔐 HMAC Signed QR
+            </span>
+          </div>
+        </div>
+        <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.8rem;">
+          {SVG_QR}
+          <div style="font-size:.68rem;color:#fca5a5;font-weight:600;letter-spacing:.08em;">SCAN TO RESPOND</div>
+        </div>
+      </div>
+      <div class="hero-road"><div class="hero-road-stripe"></div></div>
     </div>
     """, unsafe_allow_html=True)
 
-    # ── Stat metrics ──
+    # ── Live Stat Cards with SVG icons ───────────────────────────────────────
     col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.markdown(f"""<div class="metric-card">
-            <div class="value">{len(st.session_state.vehicles)}</div>
-            <div class="label">Registered Vehicles</div></div>""", unsafe_allow_html=True)
-    with col2:
-        st.markdown(f"""<div class="metric-card">
-            <div class="value">{st.session_state.total_scans}</div>
-            <div class="label">Total QR Scans</div></div>""", unsafe_allow_html=True)
-    with col3:
-        st.markdown(f"""<div class="metric-card">
-            <div class="value">{st.session_state.notifications_sent}</div>
-            <div class="label">Notifications Sent</div></div>""", unsafe_allow_html=True)
-    with col4:
-        st.markdown("""<div class="metric-card">
-            <div class="value">98.4%</div>
-            <div class="label">Notification Success Rate</div></div>""", unsafe_allow_html=True)
+    stat_svgs = [
+        # car icon
+        """<svg width="36" height="24" viewBox="0 0 36 24"><rect x="2" y="8" width="32" height="12" rx="4" fill="#ef4444"/>
+           <rect x="6" y="4" width="22" height="9" rx="3" fill="#b91c1c"/>
+           <circle cx="9" cy="20" r="4" fill="#1f2937"/><circle cx="27" cy="20" r="4" fill="#1f2937"/>
+           <rect x="8" y="6" width="8" height="6" rx="1" fill="#bfdbfe" opacity=".7"/>
+           <rect x="20" y="6" width="8" height="6" rx="1" fill="#bfdbfe" opacity=".7"/></svg>""",
+        # QR scan icon
+        """<svg width="36" height="36" viewBox="0 0 36 36"><rect x="2" y="2" width="12" height="12" rx="2" fill="none" stroke="#ef4444" stroke-width="2"/>
+           <rect x="5" y="5" width="6" height="6" rx="1" fill="#ef4444"/>
+           <rect x="22" y="2" width="12" height="12" rx="2" fill="none" stroke="#ef4444" stroke-width="2"/>
+           <rect x="25" y="5" width="6" height="6" rx="1" fill="#ef4444"/>
+           <rect x="2" y="22" width="12" height="12" rx="2" fill="none" stroke="#ef4444" stroke-width="2"/>
+           <rect x="5" y="25" width="6" height="6" rx="1" fill="#ef4444"/>
+           <line x1="22" y1="22" x2="34" y2="34" stroke="#ef4444" stroke-width="2"/></svg>""",
+        # bell icon
+        """<svg width="30" height="34" viewBox="0 0 30 34"><path d="M15 2C9 2 5 7 5 13L5 24L1 28L29 28L25 24L25 13C25 7 21 2 15 2Z" fill="#ef4444"/>
+           <circle cx="15" cy="31" r="3" fill="#b91c1c"/></svg>""",
+        # checkmark icon
+        """<svg width="36" height="36" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="none" stroke="#ef4444" stroke-width="2"/>
+           <polyline points="10,18 15,24 26,12" fill="none" stroke="#ef4444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>""",
+    ]
+    stat_data = [
+        (len(st.session_state.vehicles), "Registered Vehicles"),
+        (st.session_state.total_scans, "Total QR Scans"),
+        (st.session_state.notifications_sent, "Notifications Sent"),
+        ("98.4%", "Success Rate"),
+    ]
+    for col, svg, (val, label) in zip([col1,col2,col3,col4], stat_svgs, stat_data):
+        with col:
+            st.markdown(f"""
+            <div class="stat-card">
+              <div class="sc-icon">{svg}</div>
+              <div class="value">{val}</div>
+              <div class="label">{label}</div>
+            </div>""", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ── How it works ──
+    # ── How It Works — illustrated steps ─────────────────────────────────────
     st.markdown("""
     <div class="section-header">
         <span style="font-size:1.4rem;">⚡</span>
@@ -400,84 +699,143 @@ if page == "🏠 Home":
     </div>
     """, unsafe_allow_html=True)
 
-    steps = [
-        ("1️⃣", "QR Sticker on Vehicle", "Tamper-resistant signed QR sticker fixed to dashboard, fuel lid, and rear windscreen of every registered vehicle."),
-        ("2️⃣", "Bystander Scans QR", "Any smartphone camera scans the sticker — no app install required. Opens the mobile-first incident portal instantly."),
-        ("3️⃣", "Medical Profile Revealed", "Owner's blood group, allergies, medications and chronic conditions shown to the responder immediately."),
-        ("4️⃣", "Auto Notification Triggered", "System places an automated call + SMS/WhatsApp to registered family members with live GPS location and timestamp."),
-        ("5️⃣", "RAG Assistant Guides Responder", "IBM WatsonX RAG answers first-aid questions from verified protocols — no hallucination, every answer is cited."),
-        ("6️⃣", "Audit Trail Created", "Every scan, notification, call status and assistant query is logged with timestamps for accountability."),
+    steps_data = [
+        (SVG_QR,           "1. QR Sticker on Vehicle",     "Tamper-resistant HMAC-signed QR on dashboard, fuel lid and rear windscreen. No app needed by responder."),
+        (SVG_PHONE_SCAN,   "2. Bystander Scans QR",        "Any smartphone camera — scan opens the mobile-first incident portal instantly with full victim profile."),
+        (SVG_MEDICAL,      "3. Medical Profile Revealed",   "Blood group, allergies, medications and chronic conditions shown to responder immediately."),
+        (SVG_GPS,          "4. Auto Notification Triggered","Automated call + SMS/WhatsApp to family with live GPS coordinates, timestamp and responder callback."),
+        (SVG_BRAIN_AI,     "5. RAG Assistant Guides",       "IBM WatsonX Granite LLM answers first-aid questions from verified protocols — cited, no hallucination."),
+        (SVG_NOTIFICATION, "6. Audit Trail Created",        "Every scan, call status and assistant query logged with timestamps for accountability and review."),
     ]
     r1_cols = st.columns(3)
     r2_cols = st.columns(3)
-    for i, (icon, title, desc) in enumerate(steps):
+    for i, (svg, title, desc) in enumerate(steps_data):
         col = r1_cols[i] if i < 3 else r2_cols[i - 3]
         with col:
             st.markdown(f"""
-            <div class="feature-card">
-                <div class="icon">{icon}</div>
-                <h3>{title}</h3>
-                <p>{desc}</p>
+            <div class="feature-card" style="text-align:center;">
+              <div style="margin:.4rem auto .8rem;width:fit-content;">{svg}</div>
+              <h3 style="font-size:.95rem;">{title}</h3>
+              <p>{desc}</p>
             </div>""", unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ── Problem Context ──
+    # ── Problem vs Solution row with illustrations ────────────────────────────
     col_a, col_b = st.columns(2)
     with col_a:
-        st.markdown("""
-        <div class="section-header"><span>🩸</span><h2>The Problem We Solve</h2></div>
-        <div class="danger-box">
+        st.markdown(f"""
+        <div class="section-header"><span>💥</span><h2>The Problem</h2></div>
+        <div class="danger-box" style="display:flex;gap:1.2rem;align-items:flex-start;">
+          <div style="flex-shrink:0;">{SVG_CAR_CRASH}</div>
+          <div>
             <b>India records one of the highest road-traffic fatality rates globally.</b><br><br>
-            A significant share of deaths are attributed to:<br>
-            • Delayed detection and notification<br>
-            • Medical information locked inside the vehicle<br>
-            • Untrained bystanders with no reliable guidance<br>
-            • Family informed minutes-to-hours late via second-hand information
+            Deaths attributed to:<br>
+            🔴 Delayed detection &amp; notification<br>
+            🔴 Medical info locked in damaged vehicle<br>
+            🔴 Untrained bystanders, no guidance<br>
+            🔴 Family informed hours late
+          </div>
         </div>
         """, unsafe_allow_html=True)
     with col_b:
-        st.markdown("""
-        <div class="section-header"><span>🧠</span><h2>IBM WatsonX RAG Assistant</h2></div>
-        <div class="info-box">
-            <b>Retrieval-Augmented Generation (RAG)</b> grounds every answer in a curated knowledge base:<br><br>
-            📄 Standard first-aid and trauma-care protocols<br>
+        st.markdown(f"""
+        <div class="section-header"><span>🧠</span><h2>IBM WatsonX RAG Solution</h2></div>
+        <div class="info-box" style="display:flex;gap:1.2rem;align-items:flex-start;">
+          <div style="flex-shrink:0;">{SVG_BRAIN_AI}</div>
+          <div>
+            <b>RAG grounds every answer in a curated verified knowledge base:</b><br><br>
+            📄 First-aid &amp; trauma-care protocols<br>
             🚑 Emergency response procedures<br>
             👤 Victim-specific uploaded documents<br>
-            🚗 Vehicle post-accident safety guidance<br>
-            ⚡ EV high-voltage safety protocols<br><br>
-            <b>Every answer includes inline citations. Low-confidence queries defer to emergency services.</b>
+            🚗 EV high-voltage safety guidance<br><br>
+            <b>Every answer is cited. Low-confidence queries defer to 108/112.</b>
+          </div>
         </div>
         """, unsafe_allow_html=True)
 
-    # ── Quick Action Cards ──
+    # ── Quick Action Cards with SVG ───────────────────────────────────────────
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("""
-    <div class="section-header"><span>🚀</span><h2>Quick Actions</h2></div>
-    """, unsafe_allow_html=True)
+    st.markdown("""<div class="section-header"><span>🚀</span><h2>Quick Actions</h2></div>""", unsafe_allow_html=True)
 
-    qa_cols = st.columns(4)
-    qa_actions = [
-        ("📋", "Register Vehicle", "Owner Registration", "Add your vehicle and medical profile"),
-        ("🔲", "Generate QR", "QR Code Generator", "Create signed QR stickers for your vehicle"),
-        ("🚑", "Emergency Portal", "Incident Portal", "Simulate a scan and trigger notifications"),
-        ("🤖", "Ask RAG Assistant", "RAG Assistant", "Get grounded first-aid guidance"),
+    qa_svgs = [
+        # clipboard/registration
+        """<svg width="48" height="52" viewBox="0 0 48 52"><rect x="4" y="8" width="40" height="40" rx="5" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+           <rect x="16" y="2" width="16" height="10" rx="3" fill="#374151" stroke="#3b82f6" stroke-width="1.5"/>
+           <line x1="12" y1="22" x2="36" y2="22" stroke="#3b82f6" stroke-width="2"/>
+           <line x1="12" y1="30" x2="36" y2="30" stroke="#3b82f6" stroke-width="2"/>
+           <line x1="12" y1="38" x2="28" y2="38" stroke="#3b82f6" stroke-width="2"/></svg>""",
+        # QR sticker
+        """<svg width="48" height="48" viewBox="0 0 48 48"><rect x="2" y="2" width="44" height="44" rx="6" fill="#1e3a5f" stroke="#ef4444" stroke-width="2"/>
+           <rect x="8" y="8" width="14" height="14" rx="2" fill="none" stroke="#ef4444" stroke-width="2"/>
+           <rect x="11" y="11" width="8" height="8" rx="1" fill="#ef4444"/>
+           <rect x="26" y="8" width="14" height="14" rx="2" fill="none" stroke="#ef4444" stroke-width="2"/>
+           <rect x="29" y="11" width="8" height="8" rx="1" fill="#ef4444"/>
+           <rect x="8" y="26" width="14" height="14" rx="2" fill="none" stroke="#ef4444" stroke-width="2"/>
+           <rect x="11" y="29" width="8" height="8" rx="1" fill="#ef4444"/>
+           <rect x="27" y="27" width="4" height="4" fill="#ef4444"/><rect x="33" y="27" width="4" height="4" fill="#ef4444"/>
+           <rect x="27" y="33" width="4" height="4" fill="#ef4444"/><rect x="33" y="33" width="4" height="4" fill="#ef4444"/></svg>""",
+        # ambulance
+        f"""<div style="transform:scale(.55);transform-origin:top left;width:88px;height:44px;overflow:hidden;">{SVG_AMBULANCE}</div>""",
+        # brain
+        f"""<div style="transform:scale(.5);transform-origin:top left;width:50px;height:50px;overflow:hidden;">{SVG_BRAIN_AI}</div>""",
     ]
-    for col, (icon, label, _, desc) in zip(qa_cols, qa_actions):
+    qa_cols = st.columns(4)
+    qa_data = [
+        ("Register Vehicle",   "Add vehicle &amp; upload medical profile to the system"),
+        ("Generate QR Sticker","Create signed QR codes for dashboard and windscreen"),
+        ("Incident Portal",    "Simulate a QR scan and trigger the notification chain"),
+        ("RAG Assistant",      "Ask IBM WatsonX grounded first-aid questions"),
+    ]
+    for col, svg, (label, desc) in zip(qa_cols, qa_svgs, qa_data):
         with col:
             st.markdown(f"""
-            <div class="feature-card" style="text-align:center;">
-                <div class="icon">{icon}</div>
-                <h3>{label}</h3>
-                <p>{desc}</p>
+            <div class="feature-card" style="text-align:center;min-height:160px;">
+              <div style="height:52px;display:flex;align-items:center;justify-content:center;margin-bottom:.6rem;">{svg}</div>
+              <h3 style="font-size:.95rem;">{label}</h3>
+              <p style="font-size:.82rem;">{desc}</p>
             </div>""", unsafe_allow_html=True)
 
-    # ── RAG Modules ──
+    # ── System Modules with icons ─────────────────────────────────────────────
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("""
-    <div class="section-header"><span>🏗️</span><h2>System Modules (M1–M6)</h2></div>
-    """, unsafe_allow_html=True)
+    st.markdown("""<div class="section-header"><span>🏗️</span><h2>System Modules (M1–M6)</h2></div>""", unsafe_allow_html=True)
 
+    module_svgs = [
+        # M1 - QR lock
+        """<svg width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="4" fill="none" stroke="#ef4444" stroke-width="2"/>
+           <rect x="6" y="6" width="8" height="8" rx="1" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+           <rect x="8" y="8" width="4" height="4" rx=".5" fill="#ef4444"/>
+           <rect x="18" y="6" width="8" height="8" rx="1" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+           <rect x="20" y="8" width="4" height="4" rx=".5" fill="#ef4444"/>
+           <rect x="6" y="18" width="8" height="8" rx="1" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+           <rect x="8" y="20" width="4" height="4" rx=".5" fill="#ef4444"/>
+           <rect x="18" y="18" width="4" height="4" rx=".5" fill="#ef4444"/>
+           <rect x="24" y="22" width="4" height="4" rx=".5" fill="#ef4444"/></svg>""",
+        # M2 - person
+        """<svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="10" r="7" fill="#f97316" opacity=".8"/>
+           <path d="M4 28 C4 20 28 20 28 28Z" fill="#f97316" opacity=".8"/></svg>""",
+        # M3 - phone
+        """<svg width="22" height="32" viewBox="0 0 22 32"><rect x="1" y="1" width="20" height="30" rx="4" fill="none" stroke="#eab308" stroke-width="2"/>
+           <rect x="4" y="5" width="14" height="20" rx="2" fill="#eab308" opacity=".3"/>
+           <circle cx="11" cy="28" r="2" fill="#eab308"/></svg>""",
+        # M4 - signal
+        """<svg width="32" height="28" viewBox="0 0 32 28"><circle cx="16" cy="20" r="4" fill="#22c55e"/>
+           <path d="M8 14 Q16 6 24 14" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+           <path d="M3 8 Q16 -2 29 8" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" opacity=".6"/></svg>""",
+        # M5 - chip/AI
+        """<svg width="32" height="32" viewBox="0 0 32 32"><rect x="8" y="8" width="16" height="16" rx="3" fill="#3b82f6" opacity=".8"/>
+           <line x1="12" y1="2" x2="12" y2="8" stroke="#3b82f6" stroke-width="2"/><line x1="20" y1="2" x2="20" y2="8" stroke="#3b82f6" stroke-width="2"/>
+           <line x1="12" y1="24" x2="12" y2="30" stroke="#3b82f6" stroke-width="2"/><line x1="20" y1="24" x2="20" y2="30" stroke="#3b82f6" stroke-width="2"/>
+           <line x1="2" y1="12" x2="8" y2="12" stroke="#3b82f6" stroke-width="2"/><line x1="2" y1="20" x2="8" y2="20" stroke="#3b82f6" stroke-width="2"/>
+           <line x1="24" y1="12" x2="30" y2="12" stroke="#3b82f6" stroke-width="2"/><line x1="24" y1="20" x2="30" y2="20" stroke="#3b82f6" stroke-width="2"/>
+           <circle cx="16" cy="16" r="3" fill="white"/></svg>""",
+        # M6 - chart
+        """<svg width="32" height="28" viewBox="0 0 32 28"><rect x="2" y="18" width="6" height="8" rx="1" fill="#8b5cf6"/>
+           <rect x="10" y="10" width="6" height="16" rx="1" fill="#8b5cf6"/>
+           <rect x="18" y="4" width="6" height="22" rx="1" fill="#8b5cf6"/>
+           <rect x="26" y="12" width="6" height="14" rx="1" fill="#8b5cf6" opacity=".6"/>
+           <line x1="1" y1="27" x2="32" y2="27" stroke="#6d28d9" stroke-width="1.5"/></svg>""",
+    ]
     modules = [
         ("M1", "QR Issuance & Verification", "#ef4444",
          "Signed HMAC token generation, sticker rendering, tamper & replay protection."),
@@ -488,19 +846,42 @@ if page == "🏠 Home":
         ("M4", "Notification Engine", "#22c55e",
          "Outbound call, SMS/WhatsApp, acknowledgement tracking, escalation chain, retry policy."),
         ("M5", "RAG Knowledge Assistant", "#3b82f6",
-         "Ingestion → chunking → embedding → hybrid retrieval → grounded generation + citations + guardrails."),
+         "Ingestion → chunking → embedding → hybrid retrieval → grounded generation + guardrails."),
         ("M6", "Audit & Analytics", "#8b5cf6",
          "Event log, notification timeline, assistant usage analytics, evaluation dashboards."),
     ]
     m_cols = st.columns(3)
-    for i, (code, name, color, desc) in enumerate(modules):
+    for i, ((code, name, color, desc), svg) in enumerate(zip(modules, module_svgs)):
         with m_cols[i % 3]:
             st.markdown(f"""
-            <div class="feature-card" style="border-left: 4px solid {color}; margin-bottom:1rem;">
-                <div style="font-size:.75rem; color:{color}; font-weight:700; letter-spacing:.08em;">{code}</div>
-                <h3 style="margin-top:.3rem;">{name}</h3>
-                <p>{desc}</p>
+            <div class="feature-card" style="border-left:4px solid {color};margin-bottom:1rem;display:flex;gap:.9rem;align-items:flex-start;">
+              <div style="flex-shrink:0;margin-top:.2rem;">{svg}</div>
+              <div>
+                <div style="font-size:.7rem;color:{color};font-weight:700;letter-spacing:.08em;">{code}</div>
+                <h3 style="margin:.2rem 0 .3rem;font-size:.95rem;">{name}</h3>
+                <p style="font-size:.82rem;">{desc}</p>
+              </div>
             </div>""", unsafe_allow_html=True)
+
+    # ── Footer banner ─────────────────────────────────────────────────────────
+    st.markdown(f"""
+    <div style="margin-top:2rem;padding:1.2rem 2rem;background:rgba(15,23,42,.95);
+         border-radius:14px;border:1px solid #1e3a5f;display:flex;
+         align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <div style="display:flex;align-items:center;gap:1rem;">
+        {SVG_AMBULANCE}
+        <div>
+          <div style="color:#f1f5f9;font-weight:700;font-size:1rem;">VehicleGuard Emergency Response System</div>
+          <div style="color:#94a3b8;font-size:.8rem;">Powered by IBM WatsonX AI · Granite LLM · RAG Pipeline</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+        <span style="background:#0f62fe;color:#fff;padding:.3rem .9rem;border-radius:6px;font-size:.75rem;font-weight:700;">IBM WatsonX</span>
+        <span style="background:#166534;color:#bbf7d0;padding:.3rem .9rem;border-radius:6px;font-size:.75rem;font-weight:700;">🟢 SYSTEM ACTIVE</span>
+        <span style="background:#7f1d1d;color:#fca5a5;padding:.3rem .9rem;border-radius:6px;font-size:.75rem;font-weight:700;">🚨 108 / 112</span>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # PAGE 2 — OWNER REGISTRATION
